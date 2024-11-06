@@ -57,8 +57,8 @@ const Principal = () => {
     <div>
       <h1 className="bg-red-500">pagina donde se hara la descargas</h1>
       <form onSubmit={handleSubmit}>
-        <input type="file" accept=".csv" onChange={handleFileChange} /> //para
-        selecionar archivos csv
+        <input type="file" accept=".csv" onChange={handleFileChange} /> {/* //para
+        selecionar archivos csv */}
         {file && <p>Archivo seleccionado: {file.name}</p>}{" "}
         {/* Muestra el nombre del archivo */}
         {error && <p style={{ color: "red" }}>{error}</p>}{" "}
