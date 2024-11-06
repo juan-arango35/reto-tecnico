@@ -8,8 +8,13 @@ const Proveedor = ({children}) => {
 
     const login = (email, password) => {
         if (email === "admin@email.com" && password === "supersecret") {
+          const userData = {
+            email,
+            name: "admin",
+            role: "admin",
+          };
           setIsAuthenticated(true);
-          setUser({ email, name: "admin", role: "admin" });
+          setUser(userData);
           localStorage.setItem("token", "dummy-token");
         } else {
           alert("Credenciales invalidas");

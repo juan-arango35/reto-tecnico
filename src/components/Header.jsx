@@ -9,9 +9,7 @@ const Header = () => {
       <li>
         <Link to="/login">Inicia Sesión</Link>
       </li>
-      <li>
-        <Link to="/register">Registrate</Link>
-      </li>
+    
     </ul>
   );
 };
