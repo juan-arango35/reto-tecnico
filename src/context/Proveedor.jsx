@@ -1,47 +1,35 @@
 import { useEffect, useState } from "react";
 import { AuthContext } from "./AuthContext";
+import { mockLogin } from "../services/api";
 
+const Proveedor = ({ children }) => {
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-const Proveedor = ({children}) => {
-    const [isAuthenticated, setIsAuthenticated] = useState(false);
-    const [user, setUser] = useState(null);
+  const login = async (email, password) => {
+    try {
+      const response = await mockLogin(email, password);
+      console.log(response)
+      if (response.ok) {
+        setIsAuthenticated(true);
 
-    const login = (email, password) => {
-        if (email === "admin@email.com" && password === "supersecret") {
-          const userData = {
-            email,
-            name: "admin",
-            role: "admin",
-          };
-          setIsAuthenticated(true);
-          setUser(userData);
-          localStorage.setItem("token", "dummy-token");
-        } else {
-          alert("Credenciales invalidas");
-        }
-      };
+        localStorage.setItem("token", response.data.token);
+      }
+    } catch (error) {
+      alert(error.message);
+    }
+  };
 
-      const logout = () => {
-        setIsAuthenticated(false);
-        setUser(null);
-        localStorage.removeItem("token");//limpiar el localstorage
-      };
-
-      useEffect(() => {
-        const storaged = localStorage.getItem("token");
-        if(storaged){
-         setIsAuthenticated(true);
-         setUser({ email: "admin@email.com", name: "admin", role: "admin" });
-        }
-       }, []);
-
+  const logout = () => {
+    setIsAuthenticated(false);
+   
+    localStorage.removeItem("token"); //limpiar el localstorage
+  };
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, user, login, logout }}>
-        {children}
-
+    <AuthContext.Provider value={{ isAuthenticated, login, logout }}>
+      {children}
     </AuthContext.Provider>
-  )
-}
+  );
+};
 
-export default Proveedor
+export default Proveedor;
