@@ -14,6 +14,11 @@ const Header = () => {
           Ver Respuesta API
         </Link>
       </li>
+      <li>
+        <Link to="/api/login" >
+          Ver Respuesta login
+        </Link>
+      </li>
     </ul>
   );
 };

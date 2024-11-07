@@ -3,27 +3,33 @@ import { AuthContext } from "../../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 
 const Login = () => {
- 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const {login, isAuthenticated} = useContext(AuthContext);
+  const { login, isAuthenticated } = useContext(AuthContext);
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    login(email, password);
+    setError("");
+    const success = await login(email, password);
+    if (success) {
+      navigate("/");
+    } else {
+      setError("Credenciales inválidas");
+    }
   };
 
   useEffect(() => {
-    
-    if(isAuthenticated){
-      navigate("/")
+    if (isAuthenticated) {
+      navigate("/");
     }
   }, [isAuthenticated, navigate]);
+
   return (
     <div className="flex  flex-col  justify-center items-center h-screen bg-slate-400">
       <form onSubmit={handleSubmit} className="flex flex-col gap-3">
-      <h1>Iniciar Sesión</h1>
+        <h1>Iniciar Sesión</h1>
+       
         <input
           type="email"
           id="email"
