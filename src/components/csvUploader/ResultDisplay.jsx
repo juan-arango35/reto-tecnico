@@ -3,23 +3,20 @@ import React from "react";
 const ResultDisplay = ({ successRecords }) => {
   return (
     <div>
-      <h1>Resultados exitosos</h1>
+      <h2>Registros exitosos:</h2>
       {
-        successRecords.length > 0 ? (
+        successRecords.length === 0 ? (
+          <p>No hay registros exitosos</p>
+        ): (
           <ul>
-            {successRecords.map((record, index)=>(
-              <li key={index}>
-                <p>{`ID: ${record.id}`}</p>
-                <p>{`Name: ${record.name}`}</p>
-                <p>{`Email: ${record.email}`}</p>
-                <p>{`Age: ${record.age}`}</p>
-              </li>
-            ))}
+            {
+              successRecords.map((item)=>(
+                <li>
+                  {item.name} - {item.email} - {item.age}
+                </li>
+              ))
+            }
           </ul>
-
-        ) : (
-          <p>No se encontraron registros</p>
-
         )
       }
     </div>

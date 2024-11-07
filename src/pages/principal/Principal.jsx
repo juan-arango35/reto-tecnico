@@ -69,11 +69,11 @@ const Principal = () => {
             ...record,
           }));
 
-        setSuccessRecords({
-          success: successfulRecords,
-          errors: errors,
-        });
-      },
+          setSuccessRecords(successfulRecords);
+          setErrorRecords(errors);
+        },
+      
+
       header: true,
       skipEmptyLines: true,
       error: (error) => {
