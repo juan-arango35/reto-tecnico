@@ -2,12 +2,12 @@ import { useContext, useState } from "react";
 import { AuthContext } from "../../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { uploadCsv } from "../../services/api";
+import Papa from "papaparse";
 import ResultDisplay from "../../components/csvUploader/ResultDisplay";
 import ErrorCorrection from "../../components/csvUploader/ErrorCorrection";
-import { set } from "react-hook-form";
 
 const Principal = () => {
-  const [file, setFile] = useState(null);
+  const [file, setFile] = useState(null); // estado para el archivo
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
   const [successRecords, setSuccessRecords] = useState([]); //estado para los reguistros exitosos
@@ -42,7 +42,9 @@ const Principal = () => {
 
     setIsLoading(true); // cargando
     setError(""); // no hay errores
-    try {
+    setSuccessRecords([]); //limpiamos lo valores previos
+    setErrorRecords([]); //limpiamos lo errores previos
+    /*  try {
       const response = await uploadCsv(file);
       setSuccessRecords(response.data.success);
       setErrorRecords(response.data.errors);
@@ -51,13 +53,40 @@ const Principal = () => {
       setError("Error al cargar el archivo :", error.message);
     } finally {
       setIsLoading(false); // finalizamos la carga
-    }
+    } */
+
+    Papa.parse(file, {
+      complete: (result) => {
+        const records = result.data; // obtenemos los datos procesados del archivovo
+        const validRecords = []; //arreglo para almacenar los registros validos
+        const errorList = []; //arreglo para almacenar los registros erroneos
+        //iteramos sobre acda registro dela rchvo para validarlos
+
+        records.forEach((record, index) => {
+          if (record.name && record.email && record.age) {
+            validRecords.push(record);
+          } else {
+            errorList.push({
+              index,
+              record,
+              error: "Faltan los campos requeridos"});
+          }
+        });
+        setSuccessRecords(validRecords);
+        setErrorRecords(errorList);
+      },
+      error:(err)=>{
+        setError("Error al cargar el archivo :", err.message);
+      }
+    });
+    setIsLoading(false);
   };
   return (
     <div>
       <h1 className="bg-red-500">pagina donde se hara la descargas</h1>
       <form onSubmit={handleSubmit}>
-        <input type="file" accept=".csv" onChange={handleFileChange} /> {/* //para
+        <input type="file" accept=".csv" onChange={handleFileChange} />{" "}
+        {/* //para
         selecionar archivos csv */}
         {file && <p>Archivo seleccionado: {file.name}</p>}{" "}
         {/* Muestra el nombre del archivo */}

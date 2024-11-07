@@ -20,3 +20,7 @@ function App() {
   );
 }
 export default App;
+
+
+/* proyecto notion:
+https://codeablela.notion.site/Kudos-Software-Factory-C14-cfb3ce27df4348e4b5d9293a8b4d83b6 */

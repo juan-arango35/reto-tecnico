@@ -16,20 +16,25 @@ const ErrorCorrection = ({errorRecords}) => {
         {
             updateErrors.length > 0 ? (
                 <ul>
-                    {updateErrors.map((error, index)=>(
-                        <li>
-                            <p>{`Fila : ${error.row}`}</p>
-                            <ul>
-                                {
-                                    Object.entries(error.details).map(([field, message], i)=>( <li>
-                                        <strong>{field}</strong> : {message}
-                                    </li>))
-                                }
-                            </ul>
-                            <button onClick={()=>handleRetry(index)}>Reintentar</button>
-                        </li>
-                    ))}
-                </ul>
+                {updateErrors.map((error, index) => (
+                  <li key={index}> {/* Agregamos la clave para mejorar el rendimiento */}
+                    <p>{`Fila: ${error.row}`}</p> {/* Mostramos la fila donde ocurrió el error */}
+                    <ul>
+                      {/* Verificamos que error.details no sea null ni undefined antes de iterar */}
+                      {error.details && Object.entries(error.details).length > 0 ? (
+                        Object.entries(error.details).map(([field, message], i) => (
+                          <li key={i}>  {/* Agregamos la clave para cada error */}
+                            <strong>{field}</strong>: {message}
+                          </li>
+                        ))
+                      ) : (
+                        <li>No hay detalles disponibles.</li>
+                      )}
+                    </ul>
+                    <button onClick={() => handleRetry(index)}>Reintentar</button>
+                  </li>
+                ))}
+              </ul>
             ):(
                 <p>No hay errores por corregir.</p>
             )

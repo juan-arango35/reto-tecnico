@@ -27,3 +27,6 @@ const ResultDisplay = ({ successRecords }) => {
 };
 
 export default ResultDisplay;
+
+/* video de papa parse: https://www.youtube.com/watch?v=eUz8ZDsQfP8 */
+
