@@ -23,24 +23,25 @@ const Principal = () => {
   //maneja ela cmabio de archivo
   const handleFileChange = (e) => {
     setFile(e.target.files[0]);
-    setError('');
+    setError("");
   };
 
   //validar datos de csv
-  const validateData = (data) => {
+  const validateCsvData = (data) => {
     const errors = [];
-    data.forEach((row, index)=>{
+    data.forEach((row, index) => {
       const rowErrors = {};
-      if(!row.name) rowErrors.name = "El campo 'name' no puede estar vacío.";
-      if (!/^\S+@\S+\.\S+$/.test(row.email)) rowErrors.email = "El formato del campo 'email' es inválido.";
-      if (isNaN(row.age) || row.age <= 0) rowErrors.age = "El campo 'age' debe ser un número positivo.";
+      if (!row.name) rowErrors.name = "El campo 'name' no puede estar vacío.";
+      if (!/^\S+@\S+\.\S+$/.test(row.email))
+        rowErrors.email = "El formato del campo 'email' es inválido.";
+      if (isNaN(row.age) || row.age <= 0)
+        rowErrors.age = "El campo 'age' debe ser un número positivo.";
       if (Object.keys(rowErrors).length > 0) {
         errors.push({ row: index + 2, details: rowErrors });
       }
-
-    })
+    });
     return errors;
-  }
+  };
 
   //maneja el envio del formulario
   const handleSubmit = async (e) => {
@@ -54,66 +55,72 @@ const Principal = () => {
     setError(""); // no hay errores
     setSuccessRecords([]); //limpiamos lo valores previos
     setErrorRecords([]); //limpiamos lo errores previos
-    /*  try {
-      const response = await uploadCsv(file);
-      setSuccessRecords(response.data.success);
-      setErrorRecords(response.data.errors);
-      console.log(response);
-    } catch (error) {
-      setError("Error al cargar el archivo :", error.message);
-    } finally {
-      setIsLoading(false); // finalizamos la carga
-    } */
 
     Papa.parse(file, {
-      complete: (result) => {
-        const records = result.data; // obtenemos los datos procesados del archivovo
-        const validRecords = []; //arreglo para almacenar los registros validos
-        const errorList = []; //arreglo para almacenar los registros erroneos
-        //iteramos sobre acda registro dela rchvo para validarlos
+      complete: (results) => {
+        setIsLoading(false);
+        const errors = validateCsvData(results.data);
+        const successfulRecords = results.data
+          .filter(
+            (_, index) => !errors.some((error) => error.row === index + 2)
+          )
+          .map((record, index) => ({
+            id: index + 1,
+            ...record,
+          }));
 
-        records.forEach((record, index) => {
-          if (record.name && record.email && record.age) {
-            validRecords.push(record);
-          } else {
-            errorList.push({
-              index,
-              record,
-              error: "Faltan los campos requeridos"});
-          }
+        setSuccessRecords({
+          success: successfulRecords,
+          errors: errors,
         });
-        setSuccessRecords(validRecords);
-        setErrorRecords(errorList);
       },
-      error:(err)=>{
-        setError("Error al cargar el archivo :", err.message);
-      }
+      header: true,
+      skipEmptyLines: true,
+      error: (error) => {
+        setIsLoading(false);
+        setError("Error al procesar el archivo: " + error.message);
+      },
     });
-    setIsLoading(false);
   };
   return (
     <div>
       <h1 className="bg-red-500">pagina donde se hara la descargas</h1>
-      <form onSubmit={handleSubmit}>
-        <input type="file" accept=".csv" onChange={handleFileChange} />{" "}
-        {/* //para
-        selecionar archivos csv */}
-        {file && <p>Archivo seleccionado: {file.name}</p>}{" "}
-        {/* Muestra el nombre del archivo */}
-        {error && <p style={{ color: "red" }}>{error}</p>}{" "}
-        {/* Muestra el error si existe */}
-        <button type="submit" disabled={!file || isLoading}>
-          {isLoading ? "Cargando..." : "Subir Archivo"}{" "}
-          {/* Texto dependiendo del estado de carga */}
+      <form onSubmit={handleSubmit} className="mb-6">
+        <div className="mb-4">
+          <input
+            type="file"
+            accept=".csv"
+            onChange={handleFileChange}
+            className="block w-full text-sm text-gray-500
+              file:mr-4 file:py-2 file:px-4
+              file:rounded-full file:border-0
+              file:text-sm file:font-semibold
+              file:bg-blue-50 file:text-blue-700
+              hover:file:bg-blue-100"
+          />
+        </div>
+        <button
+          type="submit"
+          disabled={isLoading || !file}
+          className={`px-4 py-2 font-bold text-white rounded ${
+            isLoading || !file
+              ? "bg-gray-300 cursor-not-allowed"
+              : "bg-blue-500 hover:bg-blue-700"
+          }`}
+        >
+          {isLoading ? "Procesando..." : "Cargar CSV"}
         </button>
       </form>
 
       {/*   mostrar los errores si existen */}
-      {setSuccessRecords.length > 0 && (
-        <ResultDisplay successRecords={successRecords} />
-      )}
-      {errorRecords.length > 0 && (
-        <ErrorCorrection errorRecords={errorRecords} />
+      {error && <p className="text-red-500 mb-4">{error}</p>}
+
+      {(setSuccessRecords.length > 0 || errorRecords.length > 0) && (
+        <div>
+          <h2>Resultados</h2>
+          <ResultDisplay successRecords={successRecords} />
+          <ErrorCorrection errorRecords={errorRecords} />
+        </div>
       )}
 
       {/* boton de salir de la session */}
