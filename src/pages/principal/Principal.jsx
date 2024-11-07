@@ -1,7 +1,7 @@
 import { useContext, useState } from "react";
 import { AuthContext } from "../../context/AuthContext";
 import { useNavigate } from "react-router-dom";
-import { uploadCsv } from "../../services/api";
+
 import Papa from "papaparse";
 import ResultDisplay from "../../components/csvUploader/ResultDisplay";
 import ErrorCorrection from "../../components/csvUploader/ErrorCorrection";
