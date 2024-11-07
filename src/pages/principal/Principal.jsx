@@ -21,16 +21,26 @@ const Principal = () => {
   }
 
   //maneja ela cmabio de archivo
-  const handleFileChange = (event) => {
-    const selectedFile = event.target.files[0];
-    if (selectedFile && selectedFile.type === "text/csv") {
-      setFile(selectedFile);
-      setError("");
-    } else {
-      setFile(null);
-      setError("El archivo debe ser un CSV");
-    }
+  const handleFileChange = (e) => {
+    setFile(e.target.files[0]);
+    setError('');
   };
+
+  //validar datos de csv
+  const validateData = (data) => {
+    const errors = [];
+    data.forEach((row, index)=>{
+      const rowErrors = {};
+      if(!row.name) rowErrors.name = "El campo 'name' no puede estar vacío.";
+      if (!/^\S+@\S+\.\S+$/.test(row.email)) rowErrors.email = "El formato del campo 'email' es inválido.";
+      if (isNaN(row.age) || row.age <= 0) rowErrors.age = "El campo 'age' debe ser un número positivo.";
+      if (Object.keys(rowErrors).length > 0) {
+        errors.push({ row: index + 2, details: rowErrors });
+      }
+
+    })
+    return errors;
+  }
 
   //maneja el envio del formulario
   const handleSubmit = async (e) => {
