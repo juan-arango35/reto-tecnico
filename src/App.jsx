@@ -4,6 +4,7 @@ import Login from "./pages/login/Login";
 import Header from "./components/Header";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Proveedor from "./context/Proveedor";
+import ApiUploadSimulator from "./components/ApiUploadSimulator";
 function App() {
   return (
     <Proveedor>
@@ -12,6 +13,7 @@ function App() {
         <Routes>
           <Route element={<ProtectedRoute />}>
             <Route path="/" element={<Principal />} />
+            <Route path="/api/upload" element={<ApiUploadSimulator />} />
           </Route>
           <Route path="/login" element={<Login />} />
         </Routes>

@@ -71,6 +71,10 @@ const Principal = () => {
 
           setSuccessRecords(successfulRecords);
           setErrorRecords(errors);
+          localStorage.setItem("csvUploadResult", JSON.stringify({
+            success: successfulRecords,
+            errors:errors
+          }))
         },
       
 

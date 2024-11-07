@@ -9,7 +9,11 @@ const Header = () => {
       <li>
         <Link to="/login">Inicia Sesión</Link>
       </li>
-    
+      <li>
+        <Link to="/api/upload" >
+          Ver Respuesta API
+        </Link>
+      </li>
     </ul>
   );
 };
