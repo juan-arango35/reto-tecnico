@@ -1,8 +1,12 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
-const ResultDisplay = ({ successRecords }) => {
+const ResultDisplay = ({ successRecords,clearRecords}) => {
   return (
     <div>
+      <button onClick={clearRecords}>
+        <Link to="/">Nuevo archivo</Link>
+      </button>
       {successRecords.length > 0 && (
         <div>
           <h2>Registros exitosos:</h2>

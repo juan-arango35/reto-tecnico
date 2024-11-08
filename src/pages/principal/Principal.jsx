@@ -20,6 +20,13 @@ const Principal = () => {
     return null;
   }
 
+//funcion para limiar los registros
+
+const clearRecords = () => {
+  setSuccessRecords([]);
+  setErrorRecords([]);
+};
+
   //maneja ela cmabio de archivo
   const handleFileChange = (e) => {
     setFile(e.target.files[0]);
@@ -122,7 +129,7 @@ const Principal = () => {
       {(setSuccessRecords.length > 0 || errorRecords.length > 0) && (
         <div>
          
-          <ResultDisplay successRecords={successRecords} />
+          <ResultDisplay successRecords={successRecords} clearRecords={clearRecords} />
           <ErrorCorrection errorRecords={errorRecords} />
         </div>
       )}
