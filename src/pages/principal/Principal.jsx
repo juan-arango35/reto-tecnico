@@ -22,11 +22,22 @@ const Principal = () => {
   }
 
   //funcion para limiar los registros
-
   const clearRecords = () => {
     setSuccessRecords([]);
     setErrorRecords([]);
   };
+
+  //funcion para reitento de envio
+  const handleRetry=(correctedRecord, rowIndex)=>{
+    setTimeout(()=>{
+      const newSuccessRecords=[...successRecords, correctedRecord]
+      setSuccessRecords(newSuccessRecords)
+      const newErrorRecords=errorRecords.filter((_, index)=>index!==rowIndex)
+      setErrorRecords(newErrorRecords)
+    }, 1000)
+    
+  }
+
 
   //maneja ela cmabio de archivo
   const handleFileChange = (e) => {
@@ -143,7 +154,7 @@ const Principal = () => {
             clearRecords={clearRecords}
             showFormFn={showFormFn}
           />
-          <ErrorCorrection errorRecords={errorRecords} />
+          <ErrorCorrection errorRecords={errorRecords}  handleRetry={handleRetry}/>
         </div>
       )}
     </div>
