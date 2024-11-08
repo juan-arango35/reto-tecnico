@@ -14,7 +14,7 @@ const ResultDisplay = ({ successRecords, clearRecords }) => {
         )}
       </div>
       {successRecords.length > 0 && (
-        <button onClick={clearRecords} className="absolute right-4">
+        <button onClick={clearRecords} className="absolute right-4 px-4 py-2 font-bold bg-blue-500 hover:bg-blue-700  text-white rounded">
           <Link to="/">Nuevo archivo</Link>
         </button>
       )}
@@ -23,5 +23,11 @@ const ResultDisplay = ({ successRecords, clearRecords }) => {
 };
 
 export default ResultDisplay;
-
+/* 
+className={`px-4 py-2 font-bold text-white rounded ${
+  isLoading || !file
+    ? "bg-gray-300 cursor-not-allowed"
+    : "bg-blue-500 hover:bg-blue-700"
+}`}
+ */
 /* video de papa parse: https://www.youtube.com/watch?v=eUz8ZDsQfP8 */
