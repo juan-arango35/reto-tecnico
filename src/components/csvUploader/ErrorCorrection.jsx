@@ -9,7 +9,7 @@ const ErrorCorrection = ({ errorRecords,handleRetry }) => {
     setEditRecord(newEditRecord)
   }
 
-  const hamdleRetryFn=(rowIndex)=>{
+  const handleRetryFn=(rowIndex)=>{
     const correctedRecord = editRecord[rowIndex];
     handleRetry(correctedRecord, rowIndex)
   }
@@ -52,7 +52,7 @@ const ErrorCorrection = ({ errorRecords,handleRetry }) => {
                     {i === 0 && (
                       <td rowSpan={Object.keys(error.details).length} className="border border-gray-300 px-4 py-2 text-center">
                         <button
-                          onClick={() => handleRetry(rowIndex)}
+                          onClick={() => handleRetryFn(rowIndex)}
                           className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
                         >
                           Reintentar

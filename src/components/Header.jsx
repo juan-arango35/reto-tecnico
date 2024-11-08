@@ -4,7 +4,7 @@ import { useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
 
 const Header = () => {
-  const { logout} = useContext(AuthContext);
+  const { logout, isAuthenticated} = useContext(AuthContext);
   return (
     <div className="flex justify-end items-center gap-5 mr-3 bg-sky-400 w-full pr-4 h-12">
       <div className="ml-6">
@@ -12,13 +12,19 @@ const Header = () => {
       </div>
       <ul className="flex justify-end items-center gap-5 mr-3 pr-4 w-full">
        
-          <li>
-            <Link to="/">Carga tu Archivo</Link>
-          </li>
-      
+      {isAuthenticated && (
+            <li>
+              <Link to="/" className="hover:text-blue-200">Carga tu Archivo</Link>
+            </li>
+          )}
+      {
+        !isAuthenticated && (
+
         <li>
           <Link to="/login">Inicia Sesión</Link>
         </li>
+        )
+      }
         <li>
           <Link to="/api/upload">VRC</Link>
         </li>

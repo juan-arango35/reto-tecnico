@@ -1,51 +1,89 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../context/AuthContext";
 import { useNavigate } from "react-router-dom";
-
 import Papa from "papaparse";
 import ResultDisplay from "../../components/csvUploader/ResultDisplay";
-import ErrorCorrection from "../../components/csvUploader/ErrorCorrection";
+import ErrorCorrection from "../../components/csvUploader/ErrorCorrection"; // Add this import
 
 const Principal = () => {
-  const [file, setFile] = useState(null); // estado para el archivo
+  const [file, setFile] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
-  const [successRecords, setSuccessRecords] = useState([]); //estado para los reguistros exitosos
-  const [errorRecords, setErrorRecords] = useState([]); //estado para los registros erroneos
+  const [successRecords, setSuccessRecords] = useState([]);
+  const [errorRecords, setErrorRecords] = useState([]);
   const { isAuthenticated, showForm, hiddenForm, showFormFn } =
     useContext(AuthContext);
   const navigate = useNavigate();
-  //comprobamos si esta autenticado
-  if (!isAuthenticated) {
-    navigate("/login");
-    return null;
-  }
 
-  //funcion para limiar los registros
+  useEffect(() => {
+    if (!isAuthenticated) {
+      navigate("/login");
+    } else {
+      const saveState = JSON.parse(
+        sessionStorage.getItem("estadoComponentePrincipal")
+      );
+      if (saveState) {
+        setSuccessRecords(saveState.successRecords);
+        setErrorRecords(saveState.errorRecords);
+      }
+    }
+  }, [isAuthenticated, navigate]);
+
+  useEffect(() => {
+    const stateToSave = {
+      successRecords,
+      errorRecords,
+    };
+    sessionStorage.setItem(
+      "estadoComponentePrincipal",
+      JSON.stringify(stateToSave)
+    );
+    // Actualizar localStorage para ApiUploadSimulator
+    localStorage.setItem(
+      "csvUploadResult",
+      JSON.stringify({
+        success: successRecords,
+        errors: errorRecords,
+      })
+    );
+  }, [successRecords, errorRecords]);
+
   const clearRecords = () => {
     setSuccessRecords([]);
     setErrorRecords([]);
+    sessionStorage.removeItem("principalComponentState");
+    localStorage.removeItem("csvUploadResult");
   };
 
-  //funcion para reitento de envio
-  const handleRetry=(correctedRecord, rowIndex)=>{
-    setTimeout(()=>{
-      const newSuccessRecords=[...successRecords, correctedRecord]
-      setSuccessRecords(newSuccessRecords)
-      const newErrorRecords=errorRecords.filter((_, index)=>index!==rowIndex)
-      setErrorRecords(newErrorRecords)
-    }, 1000)
-    
-  }
+  const handleRetry = (correctedRecord, rowIndex) => {
+    const errors = validateCsvData([correctedRecord]);
+    if (errors.length === 0) {
+      setSuccessRecords((prev) => {
+        const newSuccessRecords = [...prev, correctedRecord];
+        const newErrorRecords = errorRecords.filter(
+          (_, index) => index !== rowIndex
+        );
 
+        // Actualizar localStorage
+        localStorage.setItem(
+          "csvUploadResult",
+          JSON.stringify({
+            success: newSuccessRecords,
+            errors: newErrorRecords,
+          })
+        );
 
-  //maneja ela cmabio de archivo
+        return newSuccessRecords;
+      });
+      setErrorRecords((prev) => prev.filter((_, index) => index !== rowIndex));
+    }
+  };
+
   const handleFileChange = (e) => {
     setFile(e.target.files[0]);
     setError("");
   };
 
-  //validar datos de csv
   const validateCsvData = (data) => {
     const errors = [];
     data.forEach((row, index) => {
@@ -62,18 +100,17 @@ const Principal = () => {
     return errors;
   };
 
-  //maneja el envio del formulario
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!file) {
       setError("Por favor, selecciona un archivo CSV");
-      return; // si no hay un archvo no hacer nada
+      return;
     }
 
-    setIsLoading(true); // cargando
-    setError(""); // no hay errores
-    setSuccessRecords([]); //limpiamos lo valores previos
-    setErrorRecords([]); //limpiamos lo errores previos
+    setIsLoading(true);
+    setError("");
+    setSuccessRecords([]);
+    setErrorRecords([]);
 
     Papa.parse(file, {
       complete: (results) => {
@@ -97,8 +134,8 @@ const Principal = () => {
             errors: errors,
           })
         );
+        hiddenForm(); // Hide the form after loading
       },
-
       header: true,
       skipEmptyLines: true,
       error: (error) => {
@@ -107,44 +144,50 @@ const Principal = () => {
       },
     });
   };
+
+  if (!isAuthenticated) {
+    return null;
+  }
+
   return (
-    <div className="h-screen bg-yellow-200">
-      <h1 className="bg-white h-36 flex justify-center items-center text-3xl">
+    <div className="min-h-screen bg-white p-4">
+      <h1 className="bg-white h-36 flex justify-center items-center text-3xl mb-6">
         Sistema de Carga de Datos
       </h1>
+      <hr className="mb-6" />
 
-      <form onSubmit={handleSubmit} className="mb-6 bg-red-600">
-        {showForm && (
+      {showForm && (
+        <form
+          onSubmit={handleSubmit}
+          className="mb-6 bg-white p-4 rounded-lg shadow-md"
+        >
           <div className="mb-4">
             <input
               type="file"
               accept=".csv"
               onChange={handleFileChange}
               className="block w-full text-sm text-gray-500
-              file:mr-4 file:py-2 file:px-4
-              file:rounded-full file:border-0
-              file:text-sm file:font-semibold
-              file:bg-blue-50 file:text-blue-700
-              hover:file:bg-blue-100"
+                file:mr-4 file:py-2 file:px-4
+                file:rounded-full file:border-0
+                file:text-sm file:font-semibold
+                file:bg-blue-50 file:text-blue-700
+                hover:file:bg-blue-100"
             />
           </div>
-        )}
+          <button
+            type="submit"
+            disabled={isLoading || !file}
+            className={`px-4 py-2 font-bold text-white rounded ${
+              isLoading || !file
+                ? "bg-gray-300 cursor-not-allowed"
+                : "bg-blue-500 hover:bg-blue-700"
+            }`}
+          >
+            {isLoading ? "Procesando..." : "Cargar CSV"}
+          </button>
+        </form>
+      )}
 
-        <button
-          onClick={hiddenForm}
-          type="submit"
-          disabled={isLoading || !file}
-          className={`px-4 py-2 font-bold text-white rounded ${
-            isLoading || !file
-              ? "bg-gray-300 cursor-not-allowed"
-              : "bg-blue-500 hover:bg-blue-700"
-          }`}
-        >
-          {isLoading ? "Procesando..." : "Cargar CSV"}
-        </button>
-      </form>
-
-      {/*   mostrar los errores si existen */}
       {error && <p className="text-red-500 mb-4">{error}</p>}
 
       {(successRecords.length > 0 || errorRecords.length > 0) && (
@@ -154,9 +197,23 @@ const Principal = () => {
             clearRecords={clearRecords}
             showFormFn={showFormFn}
           />
-          <ErrorCorrection errorRecords={errorRecords}  handleRetry={handleRetry}/>
+          <ErrorCorrection
+            errorRecords={errorRecords}
+            handleRetry={handleRetry}
+          />
         </div>
       )}
+
+      {!showForm &&
+        successRecords.length === 0 &&
+        errorRecords.length === 0 && (
+          <button
+            onClick={showFormFn}
+            className="px-4 py-2 font-bold text-white rounded bg-blue-500 hover:bg-blue-700"
+          >
+            Cargar nuevo archivo
+          </button>
+        )}
     </div>
   );
 };
