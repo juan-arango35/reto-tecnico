@@ -36,7 +36,7 @@ const Proveedor = ({ children }) => {
   };
 
   const logout = () => {
-    ssetIsAuthenticated(false);
+    setIsAuthenticated(false);
     setUser(null);
     localStorage.removeItem("token");
   };
