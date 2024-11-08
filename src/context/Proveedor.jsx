@@ -4,7 +4,17 @@ import { mockLogin } from "../services/api";
 
 const Proveedor = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [showForm, setShowForm] = useState(true)
   const [user, setUser] = useState(null);
+
+  //funciones para mostar el formulario
+  const hiddenForm=()=>{
+    setShowForm(false)
+  }
+
+  const showFormFn=()=>{
+    setShowForm(true)
+  }
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -42,7 +52,7 @@ const Proveedor = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, login,user, logout }}>
+    <AuthContext.Provider value={{ isAuthenticated, login,user, logout, showFormFn, hiddenForm, showForm }}>
       {children}
     </AuthContext.Provider>
   );

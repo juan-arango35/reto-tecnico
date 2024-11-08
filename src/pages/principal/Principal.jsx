@@ -12,7 +12,8 @@ const Principal = () => {
   const [error, setError] = useState("");
   const [successRecords, setSuccessRecords] = useState([]); //estado para los reguistros exitosos
   const [errorRecords, setErrorRecords] = useState([]); //estado para los registros erroneos
-  const { isAuthenticated } = useContext(AuthContext);
+  const { isAuthenticated, showForm, hiddenForm, showFormFn } =
+    useContext(AuthContext);
   const navigate = useNavigate();
   //comprobamos si esta autenticado
   if (!isAuthenticated) {
@@ -20,12 +21,12 @@ const Principal = () => {
     return null;
   }
 
-//funcion para limiar los registros
+  //funcion para limiar los registros
 
-const clearRecords = () => {
-  setSuccessRecords([]);
-  setErrorRecords([]);
-};
+  const clearRecords = () => {
+    setSuccessRecords([]);
+    setErrorRecords([]);
+  };
 
   //maneja ela cmabio de archivo
   const handleFileChange = (e) => {
@@ -76,14 +77,16 @@ const clearRecords = () => {
             ...record,
           }));
 
-          setSuccessRecords(successfulRecords);
-          setErrorRecords(errors);
-          localStorage.setItem("csvUploadResult", JSON.stringify({
+        setSuccessRecords(successfulRecords);
+        setErrorRecords(errors);
+        localStorage.setItem(
+          "csvUploadResult",
+          JSON.stringify({
             success: successfulRecords,
-            errors:errors
-          }))
-        },
-      
+            errors: errors,
+          })
+        );
+      },
 
       header: true,
       skipEmptyLines: true,
@@ -95,24 +98,29 @@ const clearRecords = () => {
   };
   return (
     <div className="h-screen bg-yellow-200">
-      <h1 className="bg-white h-36 flex justify-center items-center text-3xl">Sistema de Carga de Datos</h1>
-  
+      <h1 className="bg-white h-36 flex justify-center items-center text-3xl">
+        Sistema de Carga de Datos
+      </h1>
 
-      <form onSubmit={handleSubmit} className="mb-6">
-        <div className="mb-4">
-          <input
-            type="file"
-            accept=".csv"
-            onChange={handleFileChange}
-            className="block w-full text-sm text-gray-500
+      <form onSubmit={handleSubmit} className="mb-6 bg-red-600">
+        {showForm && (
+          <div className="mb-4">
+            <input
+              type="file"
+              accept=".csv"
+              onChange={handleFileChange}
+              className="block w-full text-sm text-gray-500
               file:mr-4 file:py-2 file:px-4
               file:rounded-full file:border-0
               file:text-sm file:font-semibold
               file:bg-blue-50 file:text-blue-700
               hover:file:bg-blue-100"
-          />
-        </div>
+            />
+          </div>
+        )}
+
         <button
+          onClick={hiddenForm}
           type="submit"
           disabled={isLoading || !file}
           className={`px-4 py-2 font-bold text-white rounded ${
@@ -124,20 +132,20 @@ const clearRecords = () => {
           {isLoading ? "Procesando..." : "Cargar CSV"}
         </button>
       </form>
-    
 
       {/*   mostrar los errores si existen */}
       {error && <p className="text-red-500 mb-4">{error}</p>}
 
-      {(setSuccessRecords.length > 0 || errorRecords.length > 0) && (
+      {(successRecords.length > 0 || errorRecords.length > 0) && (
         <div className="flex justify-center flex-col items-center">
-         
-          <ResultDisplay successRecords={successRecords} clearRecords={clearRecords} />
+          <ResultDisplay
+            successRecords={successRecords}
+            clearRecords={clearRecords}
+            showFormFn={showFormFn}
+          />
           <ErrorCorrection errorRecords={errorRecords} />
         </div>
       )}
-
-    
     </div>
   );
 };

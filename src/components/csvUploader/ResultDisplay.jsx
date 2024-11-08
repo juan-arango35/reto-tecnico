@@ -1,8 +1,13 @@
-import React from "react";
-import { Link } from "react-router-dom";
 import { CiCircleCheck } from "react-icons/ci";
+import { useNavigate } from "react-router-dom";
 
-const ResultDisplay = ({ successRecords, clearRecords }) => {
+const ResultDisplay = ({ successRecords, clearRecords,showFormFn  }) => {
+  const navigate = useNavigate();
+  const handleClick = () => {
+    showFormFn()
+    navigate("/");
+    clearRecords();
+  };
   return (
     <div className="w-full bg-white flex justify-center items-center h-12 relative  ">
       <div className="border-2 p-2 border-green-600 rounded-2xl">
@@ -14,8 +19,11 @@ const ResultDisplay = ({ successRecords, clearRecords }) => {
         )}
       </div>
       {successRecords.length > 0 && (
-        <button onClick={clearRecords} className="absolute right-4 px-4 py-2 font-bold bg-blue-500 hover:bg-blue-700  text-white rounded">
-          <Link to="/">Nuevo archivo</Link>
+        <button
+          onClick={handleClick}
+          className="absolute right-4 px-4 py-2 font-bold bg-blue-500 hover:bg-blue-700  text-white rounded"
+        >
+          Nuevo Archivo
         </button>
       )}
     </div>
@@ -23,11 +31,4 @@ const ResultDisplay = ({ successRecords, clearRecords }) => {
 };
 
 export default ResultDisplay;
-/* 
-className={`px-4 py-2 font-bold text-white rounded ${
-  isLoading || !file
-    ? "bg-gray-300 cursor-not-allowed"
-    : "bg-blue-500 hover:bg-blue-700"
-}`}
- */
-/* video de papa parse: https://www.youtube.com/watch?v=eUz8ZDsQfP8 */
+
