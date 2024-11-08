@@ -7,7 +7,13 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const { login, isAuthenticated } = useContext(AuthContext);
   const [error, setError] = useState(null)
+  const [isFormComplete, setIsFormComplete] = useState(false)
   const navigate = useNavigate();
+
+  //funcion para ver que el formulario este lleno: useEffect(() => {
+    useEffect(() => {
+      setIsFormComplete(email.trim() !== "" && password.trim() !== "");
+    }, [email, password]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -27,9 +33,9 @@ const Login = () => {
   }, [isAuthenticated, navigate]);
 
   return (
-    <div className="flex  flex-col  justify-center items-center h-screen bg-slate-400">
-      <form onSubmit={handleSubmit} className="flex flex-col gap-3">
-        <h1>Iniciar Sesión</h1>
+    <div className="flex  flex-col  justify-center items-center h-screen bg-white">
+      <form onSubmit={handleSubmit} className="flex flex-col gap-3 border-2 p-7  rounded-2xl">
+        <h1 className="text-3xl text-center hover:text-sky-950">Iniciar Sesión</h1>
        
         <input
           type="email"
@@ -39,7 +45,7 @@ const Login = () => {
           placeholder="email"
           required
         />
-        <label htmlFor="email"> Correo Electrónico</label>
+        <label htmlFor="email" className="hover:text-sky-950"> Correo Electrónico</label>
 
         <input
           type="password"
@@ -49,11 +55,16 @@ const Login = () => {
           placeholder="password"
           required
         />
-        <label htmlFor="password">Contraseña</label>
+        <label htmlFor="password" className="hover:text-sky-950">Contraseña</label>
 
-        <button type="submit">Iniciar Sesión</button>
+        <button
+        disabled={!isFormComplete}
+        type="submit" className={`px-4 py-2 font-bold text-white rounded ${
+            
+            isFormComplete ? "bg-blue-500 hover:bg-blue-700" : "bg-gray-300 cursor-not-allowed"
+          }`}>Iniciar Sesión</button>
       </form>
-      {error && <p>{error}</p>}
+      {error && <p className="text-red-500 mt-5">{error}</p>}
     </div>
   );
 };

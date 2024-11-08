@@ -12,7 +12,7 @@ const ResultDisplay = ({ successRecords }) => {
             {
               successRecords.map((item)=>(
                 <li>
-                  {item.name} - {item.email} - {item.age}
+                  {item.name} - {item.email} - {item.age} 
                 </li>
               ))
             }
