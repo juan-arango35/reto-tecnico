@@ -96,6 +96,8 @@ const clearRecords = () => {
   return (
     <div className="h-screen bg-yellow-200">
       <h1 className="bg-white h-36 flex justify-center items-center text-3xl">Sistema de Carga de Datos</h1>
+  
+
       <form onSubmit={handleSubmit} className="mb-6">
         <div className="mb-4">
           <input
@@ -122,12 +124,13 @@ const clearRecords = () => {
           {isLoading ? "Procesando..." : "Cargar CSV"}
         </button>
       </form>
+    
 
       {/*   mostrar los errores si existen */}
       {error && <p className="text-red-500 mb-4">{error}</p>}
 
       {(setSuccessRecords.length > 0 || errorRecords.length > 0) && (
-        <div>
+        <div className="flex justify-center flex-col items-center">
          
           <ResultDisplay successRecords={successRecords} clearRecords={clearRecords} />
           <ErrorCorrection errorRecords={errorRecords} />
