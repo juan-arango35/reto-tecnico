@@ -1,7 +1,10 @@
 import { Link } from "react-router-dom";
 import { BsFiletypeCsv } from "react-icons/bs";
+import { useContext } from "react";
+import { AuthContext } from "../context/AuthContext";
 
 const Header = () => {
+  const {logout} = useContext(AuthContext)
   return (
     <div  className="flex justify-end items-center gap-5 mr-3 bg-sky-400 w-full pr-4 h-12">
       <div className="ml-6">
@@ -20,6 +23,9 @@ const Header = () => {
         </li>
         <li>
           <Link to="/api/login">VRL</Link>
+        </li>
+        <li>
+          <button onClick={() => logout()}>Logout</button>
         </li>
       </ul>
     </div>

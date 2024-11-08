@@ -12,7 +12,7 @@ const Principal = () => {
   const [error, setError] = useState("");
   const [successRecords, setSuccessRecords] = useState([]); //estado para los reguistros exitosos
   const [errorRecords, setErrorRecords] = useState([]); //estado para los registros erroneos
-  const { logout, isAuthenticated } = useContext(AuthContext);
+  const { isAuthenticated } = useContext(AuthContext);
   const navigate = useNavigate();
   //comprobamos si esta autenticado
   if (!isAuthenticated) {
@@ -87,8 +87,8 @@ const Principal = () => {
     });
   };
   return (
-    <div>
-      <h1 className="bg-red-500">pagina donde se hara la descargas</h1>
+    <div className="h-screen bg-yellow-200">
+      <h1 className="bg-white h-36 flex justify-center items-center text-3xl">Sistema de Carga de Datos</h1>
       <form onSubmit={handleSubmit} className="mb-6">
         <div className="mb-4">
           <input
@@ -121,14 +121,13 @@ const Principal = () => {
 
       {(setSuccessRecords.length > 0 || errorRecords.length > 0) && (
         <div>
-          <h2>Resultados</h2>
+         
           <ResultDisplay successRecords={successRecords} />
           <ErrorCorrection errorRecords={errorRecords} />
         </div>
       )}
 
-      {/* boton de salir de la session */}
-      <button onClick={() => logout()}>logout</button>
+    
     </div>
   );
 };

@@ -64,7 +64,7 @@ const Login = () => {
             isFormComplete ? "bg-blue-500 hover:bg-blue-700" : "bg-gray-300 cursor-not-allowed"
           }`}>Iniciar Sesión</button>
       </form>
-      {error && <p className="text-red-500 mt-5">{error}</p>}
+     {error && isFormComplete && (<p className="text-red-500 mt-5">{error}</p> )}
     </div>
   );
 };
