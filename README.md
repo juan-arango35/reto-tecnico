@@ -25,22 +25,22 @@ Sigue estos pasos para clonar el repositorio e instalar las dependencias del pro
 <img src="./public/login.gif" alt="Descripción del GIF" width="900"/>
 </p>
 
-_**Navegación**: En el header de navegación, puedes encontrar enlaces que muestran respuestas simuladas del login, esta muestra la respuesta simulada del login.
+- **Navegación**: En el header de navegación, puedes encontrar enlaces que muestran respuestas simuladas del login, esta muestra la respuesta simulada del login.
   <p align="center">
 <img src="./public/resultadoslogin.gif" alt="Descripción del GIF" width="900"/>
 </p>
 
-_**Carga de datos CSV:**: En la página principal muestra un input tipo file, donde se pueden cargar los archivos de csv.
+- **Carga de datos CSV:**: En la página principal muestra un input tipo file, donde se pueden cargar los archivos de csv.
   <p align="center">
 <img src="./public/carga.gif" alt="Descripción del GIF" width="900"/>
 </p>
 
-_**Validación de Datos**: La aplicación verifica qué registros cumplen con las condiciones establecidas. Los registros válidos se guardan, y aquellos que no cumplen con los requisitos se muestran para intentar corregir.
+- **Validación de Datos**: La aplicación verifica qué registros cumplen con las condiciones establecidas. Los registros válidos se guardan, y aquellos que no cumplen con los requisitos se muestran para intentar corregir.
   <p align="center">
 <img src="./public/resultadosApi.gif" alt="Descripción del GIF" width="900"/>
 </p>
 
-_**Corrección y reenvío de datos**: Puedes corregir los registros no válidos mediante un input en la interfaz e intentar enviarlos de nuevo para validación.
+- **Corrección y reenvío de datos**: Puedes corregir los registros no válidos mediante un input en la interfaz e intentar enviarlos de nuevo para validación.
 
   ## Tecnologías Usadas
 
