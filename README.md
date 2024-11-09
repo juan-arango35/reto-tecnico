@@ -22,7 +22,7 @@ Sigue estos pasos para clonar el repositorio e instalar las dependencias del pro
 ## Proceso
 - **Login seguro**: Inicia sesión con el usuario que tenga rol de admin, sino cuenta con el email y  contraseña valido nos da el error de credenciales invalidas,  El usuario admin puede acceder a todas las rutas de la aplicación.
 
-  <img src="./login"/>
+<img src="./public/login.gif" alt="Descripción del GIF" width="500"/>
 
 - **Navegación**: En el header de navegación, puedes encontrar enlaces que muestran respuestas simuladas del login, esta muestra la respuesta simulada del login.
   
