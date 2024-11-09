@@ -22,6 +22,7 @@ const Principal = () => {
       const saveState = JSON.parse(
         sessionStorage.getItem("estadoComponentePrincipal")
       );
+      console.log(saveState)
       if (saveState) {
         setSuccessRecords(saveState.successRecords);
         setErrorRecords(saveState.errorRecords);
@@ -51,7 +52,7 @@ const Principal = () => {
   const clearRecords = () => {
     setSuccessRecords([]);
     setErrorRecords([]);
-    sessionStorage.removeItem("principalComponentState");
+    sessionStorage.removeItem("estadoComponentePrincipal");
     localStorage.removeItem("csvUploadResult");
   };
 

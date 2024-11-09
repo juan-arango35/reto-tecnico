@@ -3,6 +3,7 @@ import React, { useState } from "react";
 const ErrorCorrection = ({ errorRecords,handleRetry }) => {
   const [editRecord, setEditRecord] = useState(errorRecords)
 
+
   const handleInputChange=(rowIndex, field, value)=>{
     const newEditRecord=[...editRecord]
     newEditRecord[rowIndex].details[field]=value
