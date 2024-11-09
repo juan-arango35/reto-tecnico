@@ -14,5 +14,11 @@ Sigue estos pasos para clonar el repositorio e instalar las dependencias del pro
 1. **Clona el repositorio:**
 
    ```bash
-   git clone https://github.com/tu-usuario/tu-repositorio.git
-   cd tu-repositorio
+   git git@github.com:juan-arango35/reto-tecnico.git
+   cd reto-tecnico
+   npm install
+   npm run dev
+
+## Proceso
+- **Login seguro**: Inicia sesión con el usuario que tenga rol de admin, sino cuenta con el email y  contraseña valido nos da el error de credenciales invalidas.
+
