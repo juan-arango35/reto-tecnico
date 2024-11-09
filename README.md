@@ -7,3 +7,12 @@
 - **Rol de administrador**: los administradores tienen permisos especiales para cargar archivos CSV.
 - **Carga de archivos CSV**: permite cargar archivos CSV con datos de usuarios (nombre, correo electrónico y edad).
 - **Validación de datos**: verifica que los datos del CSV estén correctamente estructurados antes de ser cargados.
+## Instalación
+
+Sigue estos pasos para clonar el repositorio e instalar las dependencias del proyecto.
+
+1. **Clona el repositorio:**
+
+   ```bash
+   git clone https://github.com/tu-usuario/tu-repositorio.git
+   cd tu-repositorio
